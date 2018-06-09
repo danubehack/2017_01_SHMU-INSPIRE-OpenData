@@ -63,7 +63,10 @@ var ObsPropURL;
 var ProcessURL;
 var observations = [];
 
-var urlBase = "http://5.189.139.50:8080/SensorThingsServer-1.0_SKMETEO/v1.0/";
+var limit = 1000;
+
+var urlBase = "http://5.189.139.50:8080/SensorThingsServer-1.0_SK/v1.0/";
+//var urlBase = "http://sensorthings.brgm-rec.fr/SensorThings/v1.0/";
 var version = "1.0/";
 var urlDatastreams = urlBase + "Datastreams";
 var urlMultiDatastreams = urlBase + "MultiDatastreams";
@@ -240,8 +243,7 @@ $.ajax({
 			}
 		}
 	}
-	var limit = 20;
-	if (total > 20) {
+	if (total > limit) {
 			page = 0;
 			pages = parseInt(total) / parseInt(limit);
 			console.log("NUMBER OF LOOPS:" + pages);
@@ -250,7 +252,7 @@ $.ajax({
 				$('#loaderImage').show();
 				page = page + 1;
 				console.log("PAGE:" + page);
-				urlNext = urlLocations + '?$skip=' + page*20;
+				urlNext = urlLocations + '?$skip=' + page*limit;
 				$.get(urlNext, function (res) {
 					var data = res.value;
 					$.each(data, function (k, v) {
@@ -362,8 +364,8 @@ $.ajax({
 	$.each(value, function (k, v) {
 		$('#locationSelect').append('<option id="' + v['@iot.id'] + '" value="' + v.location.coordinates + '">('+(k+1)+') ' + v.name  + '</option>');
 	});
-	var limit = 20;
-	if (total > 20) {
+	//var limit = 20;
+	if (total > limit) {
 			page = 0;
 			pages = parseInt(total) / parseInt(limit);
 			console.log("NUMBER OF LOOPS:" + pages);
@@ -372,14 +374,14 @@ $.ajax({
 				$('#loaderImage').show();
 				page = page + 1;
 				console.log("PAGE:" + page);
-				urlNext = urlLocations + '?$skip=' + page*20;
+				urlNext = urlLocations + '?$skip=' + page*limit;
 				$.get(urlNext, function (res) {
 					var data = res.value;
 					$.each(data, function (k, v) {
-						var vec = page*20;
+						var vec = page*limit;
 						console.log("VEC: " + vec);
 						//select += ('<option value="'+v.id+'">'+v.title+' ('+v.type+')</option>');
-						$('#locationSelect').append('<option id="' + v['@iot.id'] + '" value="' + v.location.coordinates + '">('+(page*20+k)+') ' + v.name + '</option>');
+						$('#locationSelect').append('<option id="' + v['@iot.id'] + '" value="' + v.location.coordinates + '">('+(page*limit+k)+') ' + v.name + '</option>');
 					})
 				})
 			}
