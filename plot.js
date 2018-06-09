@@ -1,3 +1,4 @@
+var limit;
 function plotFromAPI(property,dataURL){
 	dataTotal = 0;
 	xData = [];
@@ -19,8 +20,8 @@ function plotFromAPI(property,dataURL){
 			})
 		})
 		.done(function(){
-			var limit = 100;
-			if (dataTotal > 100) {
+			//var limit = 1000;
+			if (dataTotal > limit) {
 				page = 0;
 				pages = parseInt(dataTotal) / parseInt(limit);
 				console.log("NUMBER OF LOOPS:" + pages);
@@ -29,7 +30,7 @@ function plotFromAPI(property,dataURL){
 					$('#loaderImage').show();
 					page = page + 1;
 					console.log("PAGE:" + page);
-					urlNext = dataURL + '?$skip=' + page*100;
+					urlNext = dataURL + '?$skip=' + page*limit;
 					$.get(urlNext, function (res) {
 						var data = res.value;
 						$.each(data, function (k, v) {
